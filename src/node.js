@@ -46,17 +46,27 @@ class Node {
 			let parent = this.parent;
 			this.parent.remove();
 			this.remove()
-			let secondChild = parent.right || parent.left;
+			let secondChild;
+			let isLeft = false;
+			if (parent.left) {
+				isLeft = true;
+				secondChild = parent.left;
+			} else {
+				secondChild = parent.right;
+			}
 			if (secondChild) secondChild.remove();
 			for (let child of [this.left, this.right]) {
 				if (child) child.remove();
 				parent.appendChild(child);
 			}
-			this.appendChild(parent);
-			//
-			this.appendChild(secondChild);
+			if (isLeft) {
+				this.appendChild(secondChild);
+				this.appendChild(parent);
+			} else {
+				this.appendChild(parent);
+				this.appendChild(secondChild);
+			}
 			if (grandparent) grandparent.appendChild(this);
-
 		}
 	}
 }
